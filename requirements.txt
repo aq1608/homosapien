@@ -1,0 +1,11 @@
+# Core runtime deps. For the full/editable install use: pip install -e .
+strands-agents>=0.1.0
+strands-agents-tools>=0.1.0
+sympy>=1.12
+pydantic>=2.6
+python-dotenv>=1.0
+
+# Optional — only needed to deploy to Amazon Bedrock AgentCore:
+#   pip install -e ".[agentcore]"
+# Optional — dev/test:
+#   pip install -e ".[dev]"

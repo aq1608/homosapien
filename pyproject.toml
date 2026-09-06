@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "homosapien"
+version = "0.1.0"
+description = "An AI agent that grades handwritten university mathematics with human judgement, at cohort scale."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "homosapien contributors" }]
+keywords = ["strands", "agents", "grading", "education", "mathematics", "bedrock"]
+
+dependencies = [
+    "strands-agents>=0.1.0",
+    "strands-agents-tools>=0.1.0",
+    "sympy>=1.12",
+    "pydantic>=2.6",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+# Reading handwritten scans (image/PDF prep for the vision transcriber).
+vision = [
+    "pymupdf>=1.24",
+    "pillow>=10.0",
+]
+# The educator web UI.
+ui = [
+    "streamlit>=1.36",
+    "pymupdf>=1.24",
+    "pillow>=10.0",
+]
+# Deploying the grader to Amazon Bedrock AgentCore.
+agentcore = [
+    "bedrock-agentcore",
+    "bedrock-agentcore-starter-toolkit",
+]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5",
+    "pillow>=10.0",
+]
+
+[project.scripts]
+homosapien = "homosapien.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
