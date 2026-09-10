@@ -167,15 +167,23 @@ def _render_results():
 # --------------------------------------------------------------------------- #
 st.title("✍️ homosapien")
 st.caption(f"Grading maths with human judgement · mode: **{config.mode()}**")
+st.markdown(
+    "Upload a **tutorial** and a student's **handwritten answers** → the agent "
+    "grades each step and you **review** it below. New here? Try the sample first."
+)
+if st.button("▶ Try with sample data (no files needed)"):
+    _run(fixtures.QUESTIONS, fixtures.NOTES, fixtures.cohort_answers(), "sample")
 
 with st.sidebar:
-    st.header("Input")
+    st.header("Input mode")
     input_mode = st.radio(
         "How are you providing answers?",
-        ["Sample cohort", "Whole tutorial PDF", "Per-question scans"],
+        ["Whole tutorial PDF", "Per-question scans"],
+        captions=[
+            "One student's whole handwritten paper + the tutorial PDF",
+            "One image/PDF per question (named student__question.ext)",
+        ],
     )
-    if st.button("▶ Load sample cohort", use_container_width=True):
-        _run(fixtures.QUESTIONS, fixtures.NOTES, fixtures.cohort_answers(), "sample")
     st.divider()
     st.caption(
         "MOCK uses canned model output (SymPy grading is still real). Set "
@@ -186,6 +194,8 @@ with st.sidebar:
 # --- Whole tutorial PDF (Phase 2) ------------------------------------------ #
 if input_mode == "Whole tutorial PDF":
     st.subheader("1 · Tutorial paper (questions)")
+    st.caption("Upload the typed tutorial; the agent extracts the questions. "
+               "Marks are **proposed — edit them** in the table before grading.")
     tut = st.file_uploader("Typed tutorial PDF", type=["pdf"], key="tut_pdf")
     if tut and st.button("Extract questions"):
         with st.spinner("Extracting questions…"):
@@ -202,10 +212,12 @@ if input_mode == "Whole tutorial PDF":
     )
 
     st.subheader("2 · Lecture notes / formula sheet (context, optional)")
+    st.caption("Optional context that helps the agent grade — a formula sheet or slides.")
     note_pdfs = st.file_uploader("Context PDFs", type=["pdf"], accept_multiple_files=True,
                                  key="note_pdfs")
 
     st.subheader("3 · Student's handwritten answer (one PDF)")
+    st.caption("One PDF holding the student's full handwritten submission for this tutorial.")
     student_id = st.text_input("Student id", value="student")
     ans = st.file_uploader("Answer PDF", type=["pdf"], key="ans_pdf")
 
@@ -228,6 +240,7 @@ if input_mode == "Whole tutorial PDF":
 # --- Per-question scans (Phase 1) ------------------------------------------ #
 elif input_mode == "Per-question scans":
     st.subheader("1 · Questions & lecture notes")
+    st.caption("Edit the questions and **marks** (proposed, editable); paste your notes.")
     rows = _questions_editor(_rows_from_questions(fixtures.QUESTIONS), key="pq_editor")
     notes_text = st.text_area("Lecture notes", value=fixtures.NOTES.text, height=100)
 

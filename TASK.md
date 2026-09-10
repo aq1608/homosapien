@@ -140,7 +140,7 @@ Educator eyeballs scan vs transcript, confirms or overrides. Doubles as demo gol
 
 ---
 
-# PHASE 2 — real coursework (INF1003 discrete maths)
+# PHASE 2 — real coursework
 
 **Status:** proposed plan, awaiting go-ahead. Nothing built yet.
 **Trigger:** the real dataset is (a) questions in a **typed tutorial PDF**, and
@@ -214,3 +214,47 @@ pilot proves out?
 ## Out of scope (still deferred)
 - Per-sub-part segmentation; multi-student batch over PDFs (UC2) — after the UC1
   pilot works.
+
+---
+
+# WEEKS 4–6 — the road to submission
+
+**Current state:** ahead on features, behind on proof. Done — scaffold, SymPy
+grader, proof path, reports, UC1 **and** UC2, escalation, handwriting ingestion,
+the Streamlit UI, and Phase-2 (PDF question extraction + whole-paper
+segmentation); LIVE Bedrock works. Not done — LIVE vision validated on real
+handwriting, AgentCore deployment, a measured accuracy number, UI polish, demo
+video. So weeks 4–6 are about making it **real, deployable, and provable**.
+
+## Week 4 — Make LIVE real & trustworthy (de-risk the one unproven thing)
+- [ ] Run LIVE on the real INF1003 handwriting (`T1`–`T10`) — the big unknown.
+- [ ] Tune the transcription / scheme / grading prompts against real output
+      (notation, multi-page, sub-parts).
+- [ ] Build a small validation set: grade 2–3 tutorials, compare to the
+      educator's own marking → quote an **agreement %**.
+- [ ] UI cleanup (this task): fix the mode/sample overlap; clearer guidance.
+- [ ] **Mark-scheme approval step** (deferred from the UI cleanup): educator
+      reviews the drafted per-question *criteria*, not just marks, before grading.
+- [ ] Validate attempted-vs-illegible on real blanks/smudges.
+
+## Week 5 — Deploy + robustness (the Technical-Implementation points)
+- [ ] Deploy the grader to Bedrock **AgentCore Runtime**; SymPy in the Code
+      Interpreter; UI/CLI call the hosted agent (keep the local fallback).
+- [ ] UC2 on real data at scale — several students' PDFs → per-student reports +
+      cohort insights on real handwriting.
+- [ ] Cost/latency: model routing (Sonnet default, Opus for the proof path) +
+      cache transcriptions by file hash.
+- [ ] Privacy: keep scans in-account, don't retain, README note (student PII).
+- [ ] Observability / traces wired so the demo can show the reasoning.
+
+## Week 6 — Package & film (submission)
+- [ ] README + architecture diagram + MIT license (done) + runnable setup.
+- [ ] Record the ≤5-min demo: problem / who / why → live-grade real handwriting →
+      the escalation moment → the cohort insight. Quote the validation number.
+- [ ] Submission checklist pass; live demo link if hosted (scores higher).
+- [ ] Bonus: a builder.aws.com post with "Agents for Humans" in the title.
+
+## Critical path
+Week 4's LIVE-vision validation is make-or-break (fallback: demo on typed/clean
+input, vision as a bonus). AgentCore in Week 5 is the biggest untouched score
+lever.
